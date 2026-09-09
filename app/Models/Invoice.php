@@ -23,6 +23,7 @@ class Invoice extends Model
         'subtotal',
         'tax_amount',
         'total',
+        'currency',
         'notes',
     ];
 
