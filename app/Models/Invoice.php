@@ -58,6 +58,14 @@ class Invoice extends Model
     }
 
     /**
+     * Relation : Une facture possède un historique de paiements (complets ou partiels).
+     */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    /**
      * Scope : Filtrer les factures en attente de paiement.
      */
     public function scopePending(Builder $query): Builder
