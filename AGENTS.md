@@ -71,3 +71,14 @@ Toute proposition ou modification de code doit strictement respecter les princip
 ## Protocole de Collaboration avec l'Utilisateur
 * **Validation préalable obligatoire :** Toujours lister les commandes ou fichiers à créer/modifier, expliquer le pourquoi, et attendre le "OK" explicite de l'utilisateur avant d'exécuter.
 * **Style de communication :** Concis, direct, clair et pédagogique.
+
+## Sécurité des APIs & Rate Limiting Obligatoire
+
+Pour toute création ou modification d'endpoints d'API :
+1. **Personnalisation systématique des Rate Limiters :** Ne jamais se contenter des valeurs par défaut globales. Toujours définir des règles de limitation de débit ciblées dans `app/Providers/AppServiceProvider.php` (via `RateLimiter::for()`).
+2. **Protection stricte des routes sensibles :**
+   - **Authentification (`/login`, `/register`, mot de passe) :** Limite stricte anti-brute-force (ex: maximum 5 tentatives par minute par IP).
+   - **Opérations financières (`/payments`, création de factures) :** Quotas adaptés pour éviter les soumissions répétées accidentelles ou malveillantes.
+   - **Consultation générale (`/api/*`) :** Quotas par utilisateur authentifié (`$request->user()->id`) et par IP pour les invités.
+3. **Application explicite sur les routes :** Attacher systématiquement le middleware `throttle:<nom-de-la-regle>` sur les groupes de routes correspondants dans `routes/api.php`.
+
